@@ -15,4 +15,14 @@ class WeatherService {
     }
     return null;
   }
+
+  Future<Wheater?> getCurrentWheatherByPosition(String position) async {
+    String url = '$baseUrl?key=$apiKey&q=$position';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      Wheater wheater = Wheater.fromJson(json.decode(response.body));
+      return wheater;
+    }
+    return null;
+  }
 }

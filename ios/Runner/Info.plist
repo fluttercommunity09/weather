@@ -45,5 +45,14 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<key>UIBackgroundModes</key>
+	<array>
+  	<string>location</string>
+	</array>
+<!-- NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription  -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your app needs your location to provide personalized recommendations.</string>
+
 </dict>
 </plist>
