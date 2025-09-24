@@ -1,28 +1,49 @@
-import 'package:http/http.dart' as http;
-import 'package:wheaterapp/models/wheater.dart';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../models/weather.dart';
 
 class WeatherService {
-  String apiKey = 'ac45a25c248348de9bf215711251509';
-  String baseUrl = 'http://api.weatherapi.com/v1/current.json';
+  // You'll need to get your API key from https://www.weatherapi.com/
+  // For demo purposes, I'm using a placeholder. Replace with your actual API key.
+  static const String _apiKey = 'd63c3acd35ca4c12b6d131030251509';
+  static const String _baseUrl = 'https://api.weatherapi.com/v1/current.json';
 
-  Future<Wheater?> getCurrentWheather(String cityName) async {
-    String url = '$baseUrl?key=$apiKey&q=$cityName';
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      Wheater wheater = Wheater.fromJson(json.decode(response.body));
-      return wheater;
+  static Future<Weather?> getCurrentWeather(String cityName) async {
+    try {
+      final url = '$_baseUrl?key=$_apiKey&q=$cityName&aqi=no';
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        return Weather.fromJson(data);
+      } else {
+        print('Error: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Exception: $e');
+      return null;
     }
-    return null;
   }
 
-  Future<Wheater?> getCurrentWheatherByPosition(String position) async {
-    String url = '$baseUrl?key=$apiKey&q=$position';
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      Wheater wheater = Wheater.fromJson(json.decode(response.body));
-      return wheater;
+  static Future<Weather?> getCurrentWeatherByLocation(
+    double latitude,
+    double longitude,
+  ) async {
+    try {
+      final url = '$_baseUrl?key=$_apiKey&q=$latitude,$longitude&aqi=no';
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        return Weather.fromJson(data);
+      } else {
+        print('Error: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Exception: $e');
+      return null;
     }
-    return null;
   }
 }
