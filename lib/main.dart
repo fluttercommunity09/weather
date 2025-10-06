@@ -1,17 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:wheaterapp/screens/page_home.dart';
+import 'package:wheaterapp/screens/splash_screen.dart';
+import 'package:wheaterapp/services/app_lifecycle_observer.dart';
 
 void main() {
   runApp(const WeatherApp());
 }
 
-class WeatherApp extends StatelessWidget {
+class WeatherApp extends StatefulWidget {
   const WeatherApp({super.key});
+
+  @override
+  State<WeatherApp> createState() => _WeatherAppState();
+}
+
+class _WeatherAppState extends State<WeatherApp> {
+  final _lifecycleObserver = AppLifecycleObserver();
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycleObserver.initialize();
+  }
+
+  @override
+  void dispose() {
+    _lifecycleObserver.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Weather App ',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF2196F3),
@@ -19,6 +40,7 @@ class WeatherApp extends StatelessWidget {
         ),
         useMaterial3: true,
         fontFamily: 'Roboto',
+
         appBarTheme: const AppBarTheme(
           elevation: 0,
           centerTitle: true,
@@ -26,7 +48,7 @@ class WeatherApp extends StatelessWidget {
           foregroundColor: Colors.white,
         ),
       ),
-      home: const WeatherHomePage(),
+      home: const LoadingScreen(),
     );
   }
 }

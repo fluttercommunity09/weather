@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wheaterapp/ads/src/widgets/custom_banner.dart';
+import 'package:wheaterapp/const.dart';
 import 'package:wheaterapp/models/weather.dart';
 import 'package:wheaterapp/services/weather_service.dart';
 import 'package:wheaterapp/services/location_service.dart';
@@ -39,6 +41,9 @@ class _WeatherHomePageState extends State<WeatherHomePage>
       begin: const Offset(0, 0.3),
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _slideController, curve: Curves.easeOut));
+    Future.delayed(Duration(seconds: 2), () {
+      gAds.openAdsInstance.showAdIfAvailableOpenAds();
+    });
   }
 
   Future<void> _searchWeather() async {
@@ -155,7 +160,13 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: _isLoading ? null : _getWeatherByLocation,
+                        onTap: _isLoading
+                            ? null
+                            : () {
+                                gAds.rewardInstance.showRewardAd(() {
+                                  _getWeatherByLocation();
+                                });
+                              },
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
                           padding: const EdgeInsets.all(8),
@@ -224,7 +235,10 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                               size: 24,
                             ),
                           ),
-                          onSubmitted: (_) => _searchWeather(),
+                          onSubmitted: (_) => {
+                            gAds.interInstance.showInterstitialAd(),
+                            _searchWeather(),
+                          },
                         ),
                       ),
                       Container(
@@ -232,7 +246,12 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: _isLoading ? null : _searchWeather,
+                            onTap: _isLoading
+                                ? null
+                                : () {
+                                    gAds.interInstance.showInterstitialAd();
+                                    _searchWeather();
+                                  },
                             borderRadius: BorderRadius.circular(12),
                             child: Container(
                               padding: const EdgeInsets.all(12),
@@ -265,8 +284,12 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                   ),
                 ),
               ),
-
-              const SizedBox(height: 30),
+              // const SizedBox(height: 5),
+              CustomBanner(
+                key: const ValueKey('banner_ad'),
+                ads: gAds.bannerInstance,
+              ),
+              const SizedBox(height: 5),
 
               // Weather Display Section
               Expanded(child: _buildWeatherContent()),
@@ -425,7 +448,7 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                     letterSpacing: 1.2,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Text(
                   'Current Weather',
                   style: TextStyle(
@@ -434,7 +457,7 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 20),
 
                 // Weather Icon and Condition
                 Row(
@@ -479,7 +502,7 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                     ),
                   ],
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 20),
 
                 // Temperature
                 Text(
