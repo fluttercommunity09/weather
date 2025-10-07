@@ -52,10 +52,11 @@
 	</array>
 <!-- NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription  -->
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your app needs your location to provide personalized recommendations.</string>
-	
-   <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-   <string>Weather You needs your location to provide weather updates based on your current position.</string>
+<string>Weather You uses your location to show accurate current weather and forecasts for your area.</string>
+
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>Weather You uses your location to display local weather information and forecasts based on where you are.</string>
+
 
 	<!-- admob -->
 	<key>GADApplicationIdentifier</key>
