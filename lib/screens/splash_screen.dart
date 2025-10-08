@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:wheaterapp/ads/src/multi_ads_factory.dart';
@@ -46,7 +45,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
       print('Error initializing app: $e');
       await Future.delayed(const Duration(seconds: 2), () {
         _showErrorSnackbar(
-            'Failed to load configuration. Please check your internet connection.');
+          'Failed to load configuration. Please check your internet connection.',
+        );
         setState(() {
           isLoading = false;
         });
@@ -57,10 +57,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void _showErrorSnackbar(String txt) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          txt,
-          textAlign: TextAlign.center,
-        ),
+        content: Text(txt, textAlign: TextAlign.center),
         backgroundColor: const Color(0xff33FD24),
         duration: const Duration(seconds: 1),
       ),
@@ -110,9 +107,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
                   });
                   _initializeApp();
                 },
-                child: Text(
-                  'Try Again',
-                ),
+                child: Text('Try Again'),
               ),
           ],
         ),

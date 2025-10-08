@@ -46,10 +46,10 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
-	<key>UIBackgroundModes</key>
+	<!-- <key>UIBackgroundModes</key>
 	<array>
   	<string>location</string>
-	</array>
+	</array> -->
 <!-- NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription  -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 <string>Weather You uses your location to show accurate current weather and forecasts for your area.</string>
