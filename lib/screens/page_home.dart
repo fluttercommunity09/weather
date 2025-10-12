@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wheaterapp/ads/src/widgets/custom_banner.dart';
 import 'package:wheaterapp/const.dart';
 import 'package:wheaterapp/models/weather.dart';
+import 'package:wheaterapp/screens/paywall_screen.dart';
 import 'package:wheaterapp/services/weather_service.dart';
 import 'package:wheaterapp/services/location_service.dart';
 
@@ -157,6 +158,17 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                       ),
                     ),
                     const Spacer(),
+                    IconButton(
+                      icon: Icon(Icons.workspace_premium, color: Colors.amber),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PaywallScreen(),
+                          ),
+                        );
+                      },
+                    ),
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
