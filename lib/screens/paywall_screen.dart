@@ -16,14 +16,14 @@ class _PaywallScreenState extends State<PaywallScreen> {
   final List<Map<String, dynamic>> _plans = [
     {
       'title': 'Monthly',
-      'price': '\$4.99',
+      'price': '\$3.99',
       'period': '/month',
       'description': 'Billed monthly',
       'savings': '',
     },
     {
       'title': 'Lifetime',
-      'price': '\$79.99',
+      'price': '\$6.99',
       'period': 'one-time',
       'description': 'Pay once, own forever',
       'savings': 'Best Value',

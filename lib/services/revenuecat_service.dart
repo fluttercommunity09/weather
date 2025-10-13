@@ -40,7 +40,6 @@ class RevenueCatService {
         return false;
       }
     } catch (e) {
-      print("--------------------");
       print('error: $e');
       _packages = [];
       _prices = fallbackPrices;
