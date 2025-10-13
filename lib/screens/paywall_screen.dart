@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wheaterapp/services/revenuecat_service.dart';
 
 class PaywallScreen extends StatefulWidget {
   const PaywallScreen({super.key});
@@ -54,7 +55,15 @@ class _PaywallScreenState extends State<PaywallScreen> {
   }
 
   Future<void> _loadPackages() async {
-    await Future.delayed(const Duration(seconds: 2));
+    bool result = await RevenueCatService().fetchPackages(
+      fallbackPrices: ["3.99\$", "5.99\$"],
+    );
+    if (result == true) {
+      setState(() {
+        _plans[0]['price'] = RevenueCatService().prices[0];
+        _plans[1]['price'] = RevenueCatService().prices[1];
+      });
+    }
 
     if (mounted) {
       setState(() {
@@ -288,17 +297,34 @@ class _PaywallScreenState extends State<PaywallScreen> {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Selected: ${_plans[_selectedPlanIndex]['title']}',
-                textAlign: TextAlign.center,
-              ),
-              backgroundColor: const Color(0xFF81C784),
-              duration: const Duration(seconds: 2),
-            ),
+        onTap: () async {
+          PurchaseResult purchaseResult = await RevenueCatService().purchase(
+            _selectedPlanIndex,
           );
+          if (purchaseResult.success && mounted) {
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Purchase has been successful',
+                  textAlign: TextAlign.center,
+                ),
+                backgroundColor: const Color(0xFF81C784),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  purchaseResult.error ?? "Purchase failed",
+                  textAlign: TextAlign.center,
+                ),
+                backgroundColor: const Color(0xFF81C784),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
         },
         borderRadius: BorderRadius.circular(16),
         child: Container(
@@ -334,7 +360,12 @@ class _PaywallScreenState extends State<PaywallScreen> {
 
   Widget _buildRestoreButton() {
     return TextButton(
-      onPressed: () {
+      onPressed: () async {
+        RestoreResult restoreResult = await RevenueCatService().restore();
+        // print(restoreResult.hasActiveSubscriptions);
+        if (restoreResult.hasActiveSubscriptions) {
+          Navigator.pop(context);
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
@@ -438,12 +469,12 @@ class _PaywallScreenState extends State<PaywallScreen> {
   }
 
   void _openTermsOfUse() {
-    const url = 'https://your-website.com/terms';
+    const url = 'https://sites.google.com/view/terms-weather/accueil';
     _launchURL(url, 'Terms of Use');
   }
 
   void _openPrivacyPolicy() {
-    const url = 'https://your-website.com/privacy';
+    const url = 'https://sites.google.com/view/weatheryou/accueil';
     _launchURL(url, 'Privacy Policy');
   }
 

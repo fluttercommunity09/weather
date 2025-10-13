@@ -7,6 +7,7 @@ class RevenueCatService {
   RevenueCatService._internal();
 
   List<Package> _packages = [];
+
   List<String> _prices = [];
   bool _isPro = false;
 
@@ -39,6 +40,7 @@ class RevenueCatService {
         return false;
       }
     } catch (e) {
+      print("--------------------");
       print('error: $e');
       _packages = [];
       _prices = fallbackPrices;
@@ -136,7 +138,6 @@ class RevenueCatService {
         success: true,
         hasActiveSubscriptions: hasActiveSubscriptions,
         activeSubscriptions: customerInfo.activeSubscriptions,
-        
       );
     } catch (e) {
       return RestoreResult(

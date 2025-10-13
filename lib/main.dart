@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wheaterapp/screens/splash_screen.dart';
 import 'package:wheaterapp/services/app_lifecycle_observer.dart';
+import 'package:wheaterapp/services/revenuecat_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await RevenueCatService().init('appl_jBSMWZvLUftWVOadsNzKlLnkbBn');
+
   runApp(const WeatherApp());
 }
 
@@ -19,7 +23,7 @@ class _WeatherAppState extends State<WeatherApp> {
   @override
   void initState() {
     super.initState();
-    _lifecycleObserver.initialize();
+    if (!RevenueCatService().isPro) _lifecycleObserver.initialize();
   }
 
   @override

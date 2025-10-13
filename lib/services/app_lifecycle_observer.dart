@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wheaterapp/const.dart';
 
-
 class AppLifecycleObserver with WidgetsBindingObserver {
   bool _wasInBackground = false;
 

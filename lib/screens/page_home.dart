@@ -3,6 +3,7 @@ import 'package:wheaterapp/ads/src/widgets/custom_banner.dart';
 import 'package:wheaterapp/const.dart';
 import 'package:wheaterapp/models/weather.dart';
 import 'package:wheaterapp/screens/paywall_screen.dart';
+import 'package:wheaterapp/services/revenuecat_service.dart';
 import 'package:wheaterapp/services/weather_service.dart';
 import 'package:wheaterapp/services/location_service.dart';
 
@@ -42,9 +43,17 @@ class _WeatherHomePageState extends State<WeatherHomePage>
       begin: const Offset(0, 0.3),
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _slideController, curve: Curves.easeOut));
-    Future.delayed(Duration(seconds: 2), () {
-      gAds.openAdsInstance.showAdIfAvailableOpenAds();
-    });
+
+    print(RevenueCatService().isPro);
+    if (!RevenueCatService().isPro) {
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PaywallScreen()),
+        );
+        // gAds.openAdsInstance.showAdIfAvailableOpenAds();
+      });
+    }
   }
 
   Future<void> _searchWeather() async {
@@ -158,26 +167,34 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                       ),
                     ),
                     const Spacer(),
-                    IconButton(
-                      icon: Icon(Icons.workspace_premium, color: Colors.amber),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PaywallScreen(),
-                          ),
-                        );
-                      },
-                    ),
+                    if (!RevenueCatService().isPro)
+                      IconButton(
+                        icon: Icon(
+                          Icons.workspace_premium,
+                          color: Colors.amber,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PaywallScreen(),
+                            ),
+                          );
+                        },
+                      ),
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: _isLoading
                             ? null
                             : () {
-                                gAds.rewardInstance.showRewardAd(() {
+                                if (RevenueCatService().isPro) {
                                   _getWeatherByLocation();
-                                });
+                                } else {
+                                  gAds.rewardInstance.showRewardAd(() {
+                                    _getWeatherByLocation();
+                                  });
+                                }
                               },
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
@@ -248,7 +265,9 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                             ),
                           ),
                           onSubmitted: (_) => {
-                            gAds.interInstance.showInterstitialAd(),
+                            if (!RevenueCatService().isPro)
+                              {gAds.interInstance.showInterstitialAd()},
+
                             _searchWeather(),
                           },
                         ),
@@ -261,7 +280,9 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                             onTap: _isLoading
                                 ? null
                                 : () {
-                                    gAds.interInstance.showInterstitialAd();
+                                    if (!RevenueCatService().isPro) {
+                                      gAds.interInstance.showInterstitialAd();
+                                    }
                                     _searchWeather();
                                   },
                             borderRadius: BorderRadius.circular(12),
@@ -297,10 +318,11 @@ class _WeatherHomePageState extends State<WeatherHomePage>
                 ),
               ),
               // const SizedBox(height: 5),
-              CustomBanner(
-                key: const ValueKey('banner_ad'),
-                ads: gAds.bannerInstance,
-              ),
+              if (!RevenueCatService().isPro)
+                CustomBanner(
+                  key: const ValueKey('banner_ad'),
+                  ads: gAds.bannerInstance,
+                ),
               const SizedBox(height: 5),
 
               // Weather Display Section
