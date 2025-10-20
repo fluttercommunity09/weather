@@ -132,7 +132,7 @@ class RevenueCatService {
       final customerInfo = await Purchases.restorePurchases();
       final hasActiveSubscriptions =
           customerInfo.activeSubscriptions.isNotEmpty;
-
+      _isPro = hasActiveSubscriptions;
       return RestoreResult(
         success: true,
         hasActiveSubscriptions: hasActiveSubscriptions,
